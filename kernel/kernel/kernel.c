@@ -1,4 +1,6 @@
-void clear_screen(short *video_ptr)
+#include "kernel.h"
+
+void clear_screen(unsigned short *video_ptr)
 {
 	for (int i = 0; i < 25; i++)
 	{
@@ -12,12 +14,12 @@ void clear_screen(short *video_ptr)
 void main(void)
 {
 	char *str = "Hello";
-	short *video_ptr = (short *)0xb8000;
-	short white_on_black = ((15 << 12) | (0 << 8));
+	unsigned short *video_ptr = (unsigned short *)0xb8000;
+	unsigned short white_on_black = ((15 << 12) | (0 << 8));
 
 	clear_screen(video_ptr);
 	for (int i = 0; i < 5; i++)
 	{
-		video_ptr[i] = str[i] | white_on_black;
+		video_ptr[i] = (unsigned short)str[i] | white_on_black;
 	}
 }

@@ -31,6 +31,7 @@ _start:
 	call main	# call to main kernel function
 	cli		# Disable interruptions
 loop_inf:
+	hlt
 	jmp loop_inf
 
 .size _start, . - _start
