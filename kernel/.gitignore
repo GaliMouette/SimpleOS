@@ -1,0 +1,4 @@
+SimpleKernel
+*.d
+*.o
+*.su

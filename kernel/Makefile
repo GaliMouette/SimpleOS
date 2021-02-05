@@ -29,10 +29,11 @@ EXEC_PREFIX	:= $(PREFIX)
 BOOT_DIR	?= $(EXEC_PREFIX)/boot
 INCLUDE_DIR	:= $(PREFIX)/include
 
+
 C_DEVELOP	:= -fstack-usage
 C_DIALECT	:= -ffreestanding
 C_OPTIMIZE	:= -Os
-C_WARNINGS      := -Wall -Wextra -Wformat=2 -Wswitch-default \
+C_WARNINGS	:= -Wall -Wextra -Wformat=2 -Wswitch-default \
 	-Wswitch-enum -Wcast-align -Wpointer-arith -Wbad-function-cast \
 	-Wstrict-overflow=5 -Wstrict-prototypes -Winline -Wundef \
 	-Wnested-externs -Wcast-qual -Wshadow -Wunreachable-code \
@@ -41,6 +42,7 @@ C_WARNINGS      := -Wall -Wextra -Wformat=2 -Wswitch-default \
 	-Wdouble-promotion -Wduplicated-branches -Wduplicated-cond \
 	-Wformat-truncation -Wjump-misses-init -Wnull-dereference \
 	-Wrestrict -Wmissing-prototypes
+
 
 CFLAGS		:= $(C_DEVELOP) $(C_DIALECT) $(C_OPTIMIZE) $(C_WARNINGS)
 CPPFLAGS	:= -D__is_kernel -Iinclude
@@ -80,7 +82,7 @@ install: install-headers install-kernel
 .PHONY: install-headers
 install-headers:
 >	mkdir -p $(DEST_DIR)/$(INCLUDE_DIR)
-
+>	cp -R --preserve=timestamps include/. $(DEST_DIR)/$(INCLUDE_DIR)/.
 
 .PHONY: install-kernel
 install-kernel: $(KERNEL_NAME)
@@ -94,7 +96,7 @@ $(KERNEL_NAME): $(OBJECTS) $(ARCH_DIR)/linker.ld
 
 
 $(ARCH_DIR)/crtbegin.o $(ARCH_DIR)/crtend.o:
->	cp $(shell $(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F))  $@
+>	cp $(shell $(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)) $@
 
 
 %.o: %.c
@@ -111,3 +113,6 @@ clean:
 >	rm -f $(KERNEL_NAME)
 >	rm -f $(shell find -name "*.d")
 >	rm -f $(shell find -name "*.su")
+
+
+-include $(shell find -name "*.d")

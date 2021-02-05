@@ -80,12 +80,12 @@ iso: build
 >	mkdir -p isodir/boot/grub
 >	cp $(SYSROOT)/boot/$(KERNEL_NAME) isodir/boot/$(KERNEL_NAME)
 >	echo -e "menuentry \"OS\" {\n\tmultiboot /boot/$(KERNEL_NAME)\n}" > isodir/boot/grub/grub.cfg
->	grub-mkrescue -o OS.iso isodir
+>	grub-mkrescue -o $(OS_NAME).iso isodir
 
 
 .PHONY: qemu
 qemu: iso
->	qemu-system-$(HOST_ARCH) -cdrom OS.iso
+>	qemu-system-$(HOST_ARCH) -cdrom $(OS_NAME).iso
 
 
 .PHONY: clean
@@ -93,4 +93,4 @@ clean:
 >	$(foreach project, $(PROJECTS), $(MAKE) -C $(project) clean &&) true
 >	rm -fr sysroot
 >	rm -fr isodir
->	rm -f OS.iso
+>	rm -f $(OS_NAME).iso
